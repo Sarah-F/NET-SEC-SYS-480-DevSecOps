@@ -13,5 +13,5 @@ function cloner($shallBeCloned, $baseVM, $newVMName){
     $linkedVM = New-VM -LinkedClone -Name $linkedClone -VM $vm -ReferenceSnapshot $snapshot -VMHost $vmhost -Datastore $ds
     $newvm = New-VM -Name "$newVMName.base" -VM $linkedVM -VMHost $vmhost -Datastore $ds
     $newvm | New-Snapshot -Name "Base"
-    $linkedvm | Remove-VM
+   # $linkedvm | Remove-VM
 }
