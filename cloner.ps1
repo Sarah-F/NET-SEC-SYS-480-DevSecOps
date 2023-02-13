@@ -21,5 +21,5 @@ function cloner($shallBeCloned, $baseVM, $newVMName){
 }
 
 # Run first cloner command with xubuntu, run second with vcenter 
+#cloner -shallBeCloned "480-fw" -baseVm "Base-vyos-fw" -newVMName "480-fw-2"
 #cloner -shallBeCloned "xubuntu-wan" -baseVm "Base-xubuntu" -newVMName "xubuntu-wan-2"
-cloner -shallBeCloned "vcenter" -baseVm "Base-vcenter" -newVMName "vcenter-2"
