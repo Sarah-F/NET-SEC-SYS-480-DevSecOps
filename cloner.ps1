@@ -16,4 +16,9 @@ function cloner($shallBeCloned, $baseVM, $newVMName){
     $newvm | New-Snapshot -Name "Base"
    # $linkedvm | Remove-VM
   }
+  catch {
+    Write-Host "An error occurred:"
+    Write-Host $_
+    exit
+  }
 }
