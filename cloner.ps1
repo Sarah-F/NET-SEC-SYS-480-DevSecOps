@@ -5,6 +5,7 @@ param (
 )
 
 function cloner($shallBeCloned, $baseVM, $newVMName){
+  try{
     $vm = Get-VM -Name $shallBeCloned
     $snapshot = Get-Snapshot -VM $vm -Name $baseVM
     $vmhost = Get-VMHost -Name "192.168.7.31"
@@ -14,4 +15,5 @@ function cloner($shallBeCloned, $baseVM, $newVMName){
     $newvm = New-VM -Name "$newVMName.base" -VM $linkedVM -VMHost $vmhost -Datastore $ds
     $newvm | New-Snapshot -Name "Base"
    # $linkedvm | Remove-VM
+  }
 }
