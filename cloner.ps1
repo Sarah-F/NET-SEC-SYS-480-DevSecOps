@@ -17,8 +17,7 @@ function cloner($shallBeCloned, $baseVM, $newVMName){
    # $linkedvm | Remove-VM
   }
   catch {
-    Write-Host "An error occurred:"
-    Write-Host $_
+    Write-Host "ERROR"
     exit
   }
 }
