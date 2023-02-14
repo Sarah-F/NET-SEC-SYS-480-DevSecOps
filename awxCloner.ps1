@@ -1,6 +1,6 @@
 # for awx
 
-function cloner($shallBeCloned, $baseVM, $linkedCloneName, $newVMName){
+function awxCloner($shallBeCloned, $baseVM, $linkedCloneName, $newVMName){
   try{
     Write-Host $shallBeCloned
     Write-Host $baseVM
@@ -14,7 +14,6 @@ function cloner($shallBeCloned, $baseVM, $linkedCloneName, $newVMName){
     $linkedClone = $linkedCloneName
     $linkedVM = New-VM -LinkedClone -Name $linkedClone -VM $vm -ReferenceSnapshot $snapshot -VMHost $vmhost -Datastore $ds
     $linkedVM | Get-NetworkAdapter | Set-NetworkAdapter -NetworkName 480-WAN-PortGroup
-    #$linkedvm | Remove-VM
   }
   catch {
     Write-Host "ERROR"
@@ -22,4 +21,4 @@ function cloner($shallBeCloned, $baseVM, $linkedCloneName, $newVMName){
   }
 }
  
-cloner -shallBeCloned "xubuntu-base" -baseVm "Base-xubuntu-base" -linkedCloneName "awx" -newVMName "xubuntu-base-2"
+awxCloner -shallBeCloned "xubuntu-base" -baseVm "Base-xubuntu-base" -linkedCloneName "awx" -newVMName "xubuntu-base-2"
