@@ -16,7 +16,6 @@ function 480Connect([string] $server){
     }
 }
 
-
 function Get-480Config([string] $config_path){
     Write-Host "Reading " $config_path
     $conf = $null
@@ -35,13 +34,15 @@ function Select-VM([string] $folder){
     $selected_vm=$null
     try{
         $vms = Get-VM -Location $folder
-        $index =1
+        $index = 1
         foreach($vm in $vms){
             Write-Host [$index] $vm.name
             $index+=1
         }
         $pick_index = Read-Host "Which index number [x] do you wish to pick?"
-        #480-TODO need to deal with an invalid index (consider making this check a function)
+        if($pick_index -ge $index){
+            return "Error, you selected a VM that does not exist" 
+        }        
         $selected_vm = $vms[$pick_index -1]
         Write-Host "You picked " $selected_vm.name
         #note this is a full on vm object that we can interact with
@@ -52,3 +53,25 @@ function Select-VM([string] $folder){
         Write-Host "Invalid Folder: $folder" -ForegroundColor "Red"
     }
 }
+
+function Cloner([string] $shallBeCloned, [string] $baseVM, [string] $newVMName){
+    try{
+      Write-Host $shallBeCloned
+      Write-Host $baseVM
+      Write-Host $newVMName
+    
+      $vm = Get-VM -Name $shallBeCloned
+      $snapshot = Get-Snapshot -VM $vm -Name $baseVM
+      $vmhost = Get-VMHost -Name "192.168.7.31"
+      $ds = Get-DataStore -Name "datastore1-super21"
+      $linkedClone = "{0}.linked" -f $vm.name
+      $linkedVM = New-VM -LinkedClone -Name $linkedClone -VM $vm -ReferenceSnapshot $snapshot -VMHost $vmhost -Datastore $ds
+      $newvm = New-VM -Name "$newVMName.base" -VM $linkedVM -VMHost $vmhost -Datastore $ds
+      $newvm | New-Snapshot -Name "Base"
+      $linkedvm | Remove-VM
+    }
+    catch {
+      Write-Host "ERROR"
+      exit
+    }
+  }
