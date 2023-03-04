@@ -68,10 +68,59 @@ function Cloner([string] $shallBeCloned, [string] $baseVM, [string] $newVMName){
       $linkedVM = New-VM -LinkedClone -Name $linkedClone -VM $vm -ReferenceSnapshot $snapshot -VMHost $vmhost -Datastore $ds
       $newvm = New-VM -Name "$newVMName.base" -VM $linkedVM -VMHost $vmhost -Datastore $ds
       $newvm | New-Snapshot -Name "Base"
-      $linkedvm | Remove-VM
+      #$linkedvm | Remove-VM
     }
     catch {
       Write-Host "ERROR"
       exit
     }
   }
+
+#Milestone 6
+function Create_vSwitch([string] $vSwitchName, [string] $portGroupName){
+    try{
+        Write-Host $vSwitchName
+        Write-Host $portGroupName
+
+        New-VirtualSwitch -VMHost '192.168.7.31' -Name $vSwitchName
+        Get-VMHost '192.168.7.31' | Get-VirtualSwitch -name $vSwitchName | New-VirtualPortGroup -Name $portGroupName
+    }
+    catch{
+        Write-Host "Error with virtual switch and port group creation."
+        exit
+    }
+}
+
+function Get-IP([string] $vmName){
+    Get-VM -Name $vmName | Select-Object Name, @{N="IP Address";E={@($_.Guest.IPAddress[0])}}
+    Get-NetworkAdapter -VM $vmName | Select-Object MacAddress
+}
+
+function VMStatus([string] $vmToCheck){
+    Get-VM -Name $vmToCheck
+}
+function VMStart([string] $vmToStart){
+    try{
+        Get-VM -Name $vmToStart
+        Start-VM -VM $vmToStart -Confirm
+    }
+    catch {
+        Write-Host "Your VM is already on"
+    }
+}
+
+function VMStop([string] $vmToStop){
+    try{
+        Get-VM -Name $vmToStop
+        Stop-VM -VM $vmToStop -Confirm
+    }
+    catch {
+        Write-Host "Your VM is already off"
+    }
+}
+
+#Fix show mac address
+function Set-VMNetwork([string] $vmName, [string] $networkName, [string] $esxi_host_name, [string] $vcenter_server){
+    Get-VirtualNetwork -Name $networkName
+    Get-VM -Name $vmName | Get-NetworkAdapter | Set-NetworkAdapter -Name $networkName
+}

@@ -1,4 +1,5 @@
 {
     "vcenter_server" : "vcenter.sarah.local",
-    "vm_folder" : "BASEVM"
+    "vm_folder" : "BASEVM", 
+    "esxi_host_name" : "super21.cyber.local;"
 }
