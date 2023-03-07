@@ -91,11 +91,27 @@ function Create_vSwitch([string] $vSwitchName, [string] $portGroupName){
     }
 }
 
-function Get-IP([string] $vmName){
-    Get-VM -Name $vmName | Select-Object Name, @{N="IP Address";E={@($_.Guest.IPAddress[0])}}
-    Get-NetworkAdapter -VM $vmName | Select-Object MacAddress
+function Get-IP([string] $vCenterServer, [string] $vmName){
+    $vm = Get-VM -Name $vmName
+    Get-VM -Name $vm | Select-Object Name, @{N="IP Address";E={@($_.Guest.IPAddress[0])}}
+    Get-NetworkAdapter -Server $vCenterServer -VM $vm.Name | Format-Table -AutoSize
 }
 
+
+function linkedCloner([string] $shallBeCloned, [string] $baseVM, [string] $newVMName){
+    Write-Host $shallBeCloned # = Select-VM -folder "BASEVM"
+    Write-Host $baseVM
+    Write-Host $newVMName # = Read-Host "Enter new vm name"
+    
+    
+    $vm = Get-VM -Name $shallBeCloned
+    $snapshot = Get-Snapshot -VM $vm -Name $baseVM
+    $vmhost = Get-VMHost -Name "192.168.7.31"
+    $ds = Get-DataStore -Name "datastore1-super21"
+    $linkedClone = $newVMName
+    $linkedVM = New-VM -LinkedClone -Name $linkedClone -VM $vm -ReferenceSnapshot $snapshot -VMHost $vmhost -Datastore $ds
+  }
+    
 function VMStatus([string] $vmToCheck){
     Get-VM -Name $vmToCheck
 }
@@ -108,7 +124,6 @@ function VMStart([string] $vmToStart){
         Write-Host "Your VM is already on"
     }
 }
-
 function VMStop([string] $vmToStop){
     try{
         Get-VM -Name $vmToStop
@@ -119,8 +134,8 @@ function VMStop([string] $vmToStop){
     }
 }
 
-#Fix show mac address
+#fix cloner2
 function Set-VMNetwork([string] $vmName, [string] $networkName, [string] $esxi_host_name, [string] $vcenter_server){
-    Get-VirtualNetwork -Name $networkName
-    Get-VM -Name $vmName | Get-NetworkAdapter | Set-NetworkAdapter -Name $networkName
+    $virtNet = Get-VirtualNetwork -Name $networkName
+    Get-VM -Name $vmName | Get-NetworkAdapter | Set-NetworkAdapter -NetworkName $virtNet -Confirm:$false
 }

@@ -6,19 +6,13 @@ Import-Module '480-utils' -Force
 $conf = Get-480Config -config_path '/home/user3/Documents/GitHub/NET-SEC-SYS-480-DevSecOps/480.json'
 480Connect -server $conf.vcenter_server
 
-
-
-
-
-
-
-
 <#
 # Select VM Function
 Write-Host "Selecting your VM"
 Select-VM -folder "BASEVM"
+#>
 
-
+<#
 # Call the cloner
 Write-Host "Clone a VM"
 $shallBeCloned = Read-Host -Prompt "Enter the name of the vm you wish to clone"
@@ -29,19 +23,36 @@ Get-VM
 #>
 
 <#
-#Milestone6.1
+# Milestone6.1
 # Create Virtual Machine and Port Group
 Write-Host "Create a new virtual switch and port group"
 $vSwitchName = Read-Host -Prompt "Enter the name of the virtual switch you wish to create"
 $portGroupName = Read-Host -Prompt "Enter the name of the port group you wish to create"
 Create_vSwitch -vSwitchName $vSwitchName -portGroupName $portGroupName
 Get-VirtualSwitch
+# Create vSwitch == New-Network
+# Ran, new switch and port BLUE1-LAN, 
+#>
 
-$vmName = Read-Host -Prompt "Enter the name of the virtual machine you would like the IP of"
-Get-IP -vmName $vmName -vcenter_server 'vcenter.sarah.local'
+<#
+# Get IP Info
+Get-VM
+Get-IP -vCenterServer $conf.vcenter_server -vmName $vmName
+#>
+
+<#
+# Milestone 6.2 - Deliverable 2
+# use set network function after cloner instead of doing it all at oncee
+# Call the cloner
+
+linkedCloner -shallBeCloned '480-fw-2.base'-baseVM 'Base' -newVMName 'fw-blue1'
+Set-VMNetwork -vmName 'fw-blue1' -networkName '480-WAN-PortGroup' -esxi_host_name $conf.esxi_host_name -vcenter_server $conf.vcenter_server
+Get-VM
+#>
 
 
-#Milestone6.2
+<#
+# Milestone 6.2 - Deliverable 3
 # Create Start and Stop Function
 $vmToCheck = Read-Host -Prompt "Enter the name of the virtual machine you would like to ccheck the status of"
 VMStatus -vmToCheck $vmToCheck
@@ -55,11 +66,13 @@ VMStop -vmToStop $vmToStop
 Get-VM
 #>
 
+<#
+# Milestone 6.2 - Deliverable 4
 #Set network adapter
 Get-VM
 $vmName = Read-Host -Prompt "Enter the name of the virtual machine you would like to select"
-Get-VirtualNetwork
+#Get-VirtualNetwork
 $networkName = Read-Host -Prompt "Enter the name of the network you would like to select"
-Set-VMNetwork -vmName $vmName, -networkName $networkName, -esxi_host_name $conf.esxi_host_name, -vcenter_server $conf.vcenter_server
-
-
+Set-VMNetwork -vmName $vmName -networkName $networkName -esxi_host_name $conf.esxi_host_name -vcenter_server $conf.vcenter_server
+#network name = BLUE1-LAN
+#>
