@@ -34,11 +34,11 @@ Get-VirtualSwitch
 # Ran, new switch and port BLUE1-LAN, 
 #>
 
-<#
+
 # Get IP Info
-Get-VM
+$vmName = Read-Host -Prompt "Enter the name of the vm you wish to get the IP of"
 Get-IP -vCenterServer $conf.vcenter_server -vmName $vmName
-#>
+
 
 <#
 # Milestone 6.2 - Deliverable 2
