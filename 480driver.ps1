@@ -34,22 +34,21 @@ Get-VirtualSwitch
 # Ran, new switch and port BLUE1-LAN, 
 #>
 
-
+<#
 # Get IP Info
 $vmName = Read-Host -Prompt "Enter the name of the vm you wish to get the IP of"
 Get-IP -vCenterServer $conf.vcenter_server -vmName $vmName
-
+#>
 
 <#
 # Milestone 6.2 - Deliverable 2
 # use set network function after cloner instead of doing it all at oncee
 # Call the cloner
 
-linkedCloner -shallBeCloned '480-fw-2.base'-baseVM 'Base' -newVMName 'fw-blue1'
-Set-VMNetwork -vmName 'fw-blue1' -networkName '480-WAN-PortGroup' -esxi_host_name $conf.esxi_host_name -vcenter_server $conf.vcenter_server
+linkedCloner -shallBeCloned '480-fw-2.base'-baseVM 'Base' -newVMName 'fw-blue3'
+Set-VMNetwork -vmName 'fw-blue3' -networkName '480-WAN-PortGroup' -esxi_host_name $conf.esxi_host_name -vcenter_server $conf.vcenter_server
 Get-VM
 #>
-
 
 <#
 # Milestone 6.2 - Deliverable 3
@@ -76,3 +75,19 @@ $networkName = Read-Host -Prompt "Enter the name of the network you would like t
 Set-VMNetwork -vmName $vmName -networkName $networkName -esxi_host_name $conf.esxi_host_name -vcenter_server $conf.vcenter_server
 #network name = BLUE1-LAN
 #>
+
+<#
+# Milestone 7
+for ($i=1; $i -le 3; $i++){
+    New-linkedCloner -shallBeCloned "rocky-base" -newVMName "rocky-$i" 
+    Set-VMNetwork -vmName "rocky-*" -networkName 'BLUE1-LAN' -esxi_host_name $conf.esxi_host_name -vcenter_server $conf.vcenter_server
+    VMStart -vmToStart "rocky-*"
+}
+#>
+
+
+for ($i=1; $i -le 3; $i++){
+    Get-IP -vCenterServer $conf.vcenter_server -vmName "rocky-$i" 
+}
+
+

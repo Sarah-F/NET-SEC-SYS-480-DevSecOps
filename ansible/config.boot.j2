@@ -4,7 +4,7 @@ interfaces {
         description WAN
     }
     ethernet eth1 {
-        address {{ wan_ip }}/24
+        address {{ lan_ip }}/24
         description LAN
     }
     loopback lo {

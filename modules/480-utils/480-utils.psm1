@@ -110,8 +110,8 @@ function linkedCloner([string] $shallBeCloned, [string] $baseVM, [string] $newVM
     $ds = Get-DataStore -Name "datastore1-super21"
     $linkedClone = $newVMName
     $linkedVM = New-VM -LinkedClone -Name $linkedClone -VM $vm -ReferenceSnapshot $snapshot -VMHost $vmhost -Datastore $ds
-  }
-    
+}
+
 function VMStatus([string] $vmToCheck){
     Get-VM -Name $vmToCheck
 }
@@ -133,9 +133,19 @@ function VMStop([string] $vmToStop){
         Write-Host "Your VM is already off"
     }
 }
-
-#fix cloner2
 function Set-VMNetwork([string] $vmName, [string] $networkName, [string] $esxi_host_name, [string] $vcenter_server){
-    $virtNet = Get-VirtualNetwork -Name $networkName
-    Get-VM -Name $vmName | Get-NetworkAdapter | Set-NetworkAdapter -NetworkName $virtNet -Confirm:$false
+    $vm = Get-VM -Name $vmName
+    Get-NetworkAdapter -vm $vm | Set-NetworkAdapter -NetworkName $networkName
 }
+
+function New-linkedCloner([string] $shallBeCloned, [string] $newVMName){
+    Write-Host $shallBeCloned
+    Write-Host $newVMName
+    
+    $vm = Get-VM -Name $shallBeCloned
+    $snapshot = Get-Snapshot -VM $vm -Name "Base"
+    $vmhost = Get-VMHost -Name "192.168.7.31"
+    $ds = Get-DataStore -Name "datastore1-super21"
+    $linkedClone = $newVMName
+    $linkedVM = New-VM -LinkedClone -Name $linkedClone -VM $vm -ReferenceSnapshot $snapshot -VMHost $vmhost -Datastore $ds
+  }
