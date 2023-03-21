@@ -1,6 +1,6 @@
 # Milestone 7.4
 # This playbook performs post provisioning configuration of ubuntu
-# Usage: ansible-playbook -i inventories/linux.yaml --ask-pass ubuntu-playbook.yml -K
+# Usage: ansible-playbook -i inventories/ubuntu.yaml --ask-pass ubuntu-playbook.yml -K
 - name: ubuntu config
   hosts: ubuntu
   tasks:
