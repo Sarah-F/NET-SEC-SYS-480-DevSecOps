@@ -98,6 +98,7 @@ for ($i=1; $i -le 2; $i++){
     VMStart -vmToStart "ubuntu-*"
 }
 #>
+
 for ($i=1; $i -le 2; $i++){
     Get-IP -vCenterServer $conf.vcenter_server -vmName "ubuntu-$i" 
 }

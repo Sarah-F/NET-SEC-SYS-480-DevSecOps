@@ -45,7 +45,7 @@
 
   - name: run netplan
     template:
-      src: inventories/netplan.j2.yml
+      src: netplan.j2
       dest: /etc/netplan/00-installer-config.yaml
       mode: 0644
       owner: root
