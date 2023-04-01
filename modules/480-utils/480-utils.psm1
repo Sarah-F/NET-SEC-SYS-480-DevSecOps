@@ -149,3 +149,13 @@ function New-linkedCloner([string] $shallBeCloned, [string] $newVMName){
     $linkedClone = $newVMName
     $linkedVM = New-VM -LinkedClone -Name $linkedClone -VM $vm -ReferenceSnapshot $snapshot -VMHost $vmhost -Datastore $ds
   }
+
+
+# Milestone 8
+function Edit-VM([string] $vmName, [int] $memAmt, [int] $cpuAmt){
+    $vm = Get-VM -Name $vmName
+    VMStop -vmToStop $vm
+    Get-VM -Name $vm | Select-Object Name, PowerState, MemoryGB, NumCpu, VMHost, Version
+    Get-VM -Name $vm | Set-VM -MemoryGB $memAmt -NumCpu $cpuAmt -Confirm:$false
+    Write-Host "Memory and CPU Upgrade Complete" -ForegroundColor Green
+}

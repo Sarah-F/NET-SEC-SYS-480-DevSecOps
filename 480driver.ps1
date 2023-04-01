@@ -98,7 +98,20 @@ for ($i=1; $i -le 2; $i++){
     VMStart -vmToStart "ubuntu-*"
 }
 #>
-
+<#
 for ($i=1; $i -le 2; $i++){
     Get-IP -vCenterServer $conf.vcenter_server -vmName "ubuntu-$i" 
 }
+#>
+
+# Milestone 8
+<#
+New-linkedCloner -shallBeCloned "xubuntu-base" -newVMName "wazuh" 
+Set-VMNetwork -vmName "wazuh" -networkName 'BLUE1-LAN' -esxi_host_name $conf.esxi_host_name -vcenter_server $conf.vcenter_server
+VMStart -vmToStart "wazuh"
+Get-IP -vCenterServer $conf.vcenter_server -vmName "wazuh" 
+#>
+$vmName = Read-Host "Enter the name of the VM you wish to upgrade"
+$memAmt = Read-Host "Enter new memory amount"
+$cpuAmt = Read-Host "Enter new CPU amount"
+Edit-VM -vmName $vmName -memAmt $memAmt -cpuAmt $cpuAmt

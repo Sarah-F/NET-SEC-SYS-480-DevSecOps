@@ -1,20 +1,15 @@
-# Milestone 7.4
+# Milestone 8
 linux:
   hosts:
-  children:
+  children:    
     ubuntu:
       hosts:
-        10.0.5.84:
-          hostname: ubuntu-1
-          lan_ip: 10.0.5.30
-        10.0.5.85:
-          hostname: ubuntu-2
-          lan_ip: 10.0.5.31
-        10.0.5.86:
+        10.0.5.29:
           hostname: ubuntu
-          lan_ip: 10.0.5.29
+        10.0.5.30:
+          hostname: ubuntu-1
       vars:
-        device: ens160
+        device: ens192
 
   vars:
     public_key: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDbPcDEhznGHKcNd2QeGQmICz4Y+w0+VvjSYHbBhoQt6CxiVOnUrbKKK7+whhSUAb5JQa2W7+4CSdbI/4O8oMU8Y4Z4YrGV+gynJuPDtK1MtyKOuNwCGSlrE/WrSq3LWiJmw2YJvBVUCen+5Nll5S8/SG9U+WFi2d4tkWU+k5iIybqusnz44RkF19RxCHSV483Ka86d2Bh2kRhdVqQx8RolBIgb0jxxGaKzNhxh/ea4sAQ2s5thlHDTzMoe3XXMRQXeeTo92HwhXw35Fsj3Xwj3eK4y+BkIZbSKIh35VWnxwSgnneTzI68MllI1fBsRtkCn5HeWVje2ATqtSCsJ2U6CRRMzJdP12K8G3Tt7ycB0ABstlDfP55vijqdwoBm1bTOoSbkG8Ls+EJXIiJkGTn3huSQVnqxowGK08glCEELz6aJpwbm1JvFv7evbz2Kak7+BGayj6aFhkuuj4AYk6AF6N3c/wTpvDaW6l/Y0bYhHBNNtPptR0ZBKTNXPZFR6AEU= user3@xubuntu-wan"
