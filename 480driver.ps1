@@ -110,8 +110,35 @@ New-linkedCloner -shallBeCloned "xubuntu-base" -newVMName "wazuh"
 Set-VMNetwork -vmName "wazuh" -networkName 'BLUE1-LAN' -esxi_host_name $conf.esxi_host_name -vcenter_server $conf.vcenter_server
 VMStart -vmToStart "wazuh"
 Get-IP -vCenterServer $conf.vcenter_server -vmName "wazuh" 
-#>
+
 $vmName = Read-Host "Enter the name of the VM you wish to upgrade"
 $memAmt = Read-Host "Enter new memory amount"
 $cpuAmt = Read-Host "Enter new CPU amount"
 Edit-VM -vmName $vmName -memAmt $memAmt -cpuAmt $cpuAmt
+
+
+Get-IP -vCenterServer $conf.vcenter_server -vmName "wazuh"
+#>
+
+# Milestone 9
+#New-linkedCloner -shallBeCloned "server-core-2019-base" -newVMName "dc-blue1" -datastoreNum "datastore1-super21" 
+#VMStart -vmToStart "dc-blue1"
+
+# Run Get-NetIPConfiguration in powershell - 6
+
+SetIP -VMName "dc-blue1" -IPAddr "10.0.5.5" -netmask "255.255.255.0" -gateway "10.0.5.2" -nameserver "10.0.5.2" -guestUser "deployer" -guestPass $guestPass -interfaceIndex $interfaceIndex
+#Get-IP -vCenterServer $conf.vcenter_server -vmName "dc-blue1"
+
+<#
+Demo commands for 9.1
+ssh deployer@10.0.5.5
+ipconfig /all
+
+Demo commands for 9.2
+ssh deployer@10.0.5.5
+powershell
+hostname
+whoami
+Get-ADGroupMember -Identity "Domain Admins"
+Get-ADOrganizationalUnit -LDAPFilter '(name=*)' -SearchBase 'OU=BLUE1,DC=sarah,DC=LOCAL' | Format-Table Name
+#>
