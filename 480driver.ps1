@@ -121,14 +121,26 @@ Get-IP -vCenterServer $conf.vcenter_server -vmName "wazuh"
 #>
 
 # Milestone 9
-#New-linkedCloner -shallBeCloned "server-core-2019-base" -newVMName "dc-blue1" -datastoreNum "datastore1-super21" 
-#VMStart -vmToStart "dc-blue1"
+#New-linkedCloner -shallBeCloned "server-core-2019-base" -newVMName "dc-blue2" -datastoreNum "datastore1-super21" 
+#VMStart -vmToStart "dc-blue2"
 
 # Run Get-NetIPConfiguration in powershell - 6
+<#
+$VMName = Read-Host -Prompt "Enter vm name"
+$interfaceIndex = Read-Host -Prompt "Enter interface index"
+$IPAddr = Read-Host -Prompt "Enter ip addresss"
+$netmask = Read-Host -Prompt "Enter netmask"
+$gateway = Read-Host -Prompt "Enter gateway"
+$guestUser = Read-Host -Prompt "Enter usename"
+SetIP -VMName $VMName -interfaceIndex $interfaceIndex -IPAddr $IPAddr -netmask $netmask -gateway $gateway -nameserver $IPAddr -guestUser $guestUser -guestPass $guestPass
+#>
+#SetIP -VMName "dc-blue1" -interfaceIndex "Ethernet0" -IPAddr "10.0.5.6" -netmask "255.255.255.0" -gateway "10.0.5.2" -nameserver "10.0.5.2" -guestUser "deployer" -guestPass $guestPass
+Get-IP -vCenterServer $conf.vcenter_server -vmName "dc-blue2"
+#>
 
-SetIP -VMName "dc-blue1" -IPAddr "10.0.5.5" -netmask "255.255.255.0" -gateway "10.0.5.2" -nameserver "10.0.5.2" -guestUser "deployer" -guestPass $guestPass -interfaceIndex $interfaceIndex
-#Get-IP -vCenterServer $conf.vcenter_server -vmName "dc-blue1"
-
+New-NetIPAddress -InterfaceIndex 6 -IPAddress 10.0.5.7 -PrefixLength 24 -DefaultGateway 10.0.5.2
+Set-DnsClientServerAddress -InterfaceIndex 6 -ServerAddresses 10.0.5.2
+Get-NetIPConfiguration
 <#
 Demo commands for 9.1
 ssh deployer@10.0.5.5

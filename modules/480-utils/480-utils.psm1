@@ -176,15 +176,28 @@ function New-linkedCloner2([string] $shallBeCloned, [string] $newVMName, [string
 
 function SetIP([string] $VMName, [string] $interfaceIndex, [string] $IPAddr, [string] $netmask, [string] $gateway, [string] $nameserver, [string] $guestUser, [string] $guestPass){ 
     Get-NetworkAdapter -VM $VMName | Set-NetworkAdapter -NetworkName "BLUE1-LAN"
-    $interfaceIndex = Read-Host -Prompt "Enter interface index"
+
+    $guestPass = Read-Host -Prompt "Enter password"
+    Write-Host $VMName
+    Write-Host $interfaceIndex
+    Write-Host $IPAddr
+    Write-Host $netmask
+    Write-Host $gateway
+    Write-Host $nameserver
+    Write-Host $guestUser
+    Write-Host $guestPass
     
-    $scriptIP = "netsh interface ipv4 set address name='$interfaceIndex' static $IPAddr $netmask $gateway"
-    Invoke-VMScript -VM $VMName -ScriptText $scriptIP -GuestUser $guestUser -GuestPassword $guestPass
+    $scriptIP = "netsh interface ip set address name='$interfaceIndex' static $IPAddr $netmask $gateway"
+    Invoke-VMScript -VM $VMName -ScriptText $scriptIP -GuestUser $guestUser -GuestPassword $guestPass -ScriptType bat -WarningAction 0
 
-    $scriptDNS1 = 'netsh interface ipv4 set dns name=`"Ethernet0" static 10.0.5.2'
-    Invoke-VMScript -VM $VMName -ScriptText $scriptDNS1 -GuestUser $guestUser -GuestPassword $guestPass
+    #$scriptIP = "netsh interface ip set address name='Ethernet0' static 10.0.5.7 255.255.255.0 10.0.5.2"
+    #Invoke-VMScript -VM "dc-blue2" -ScriptText $scriptIP -GuestUser "deployer" -GuestPassword "Password123$" -ScriptType bat -WarningAction 0
 
-    $scriptDNS2 = 'netsh interface ipv4 set dns name=`"Ethernet1" static 8.8.8.8'
-    Invoke-VMScript -VM $VMName -ScriptText $scriptDNS2 -GuestUser $guestUser -GuestPassword $guestPass
+
+    $scriptDNS1 = 'netsh interface ip set dns name=`"Ethernet0" static 10.0.5.2'
+    Invoke-VMScript -VM $VMName -ScriptText $scriptDNS1 -GuestUser $guestUser -GuestPassword $guestPass -ScriptType bat -WarningAction 0
+
+    #$scriptDNS2 = 'netsh interface ipv4 set dns name=`"Ethernet1" static 8.8.8.8'
+    #Invoke-VMScript -VM $VMName -ScriptText $scriptDNS2 -GuestUser $guestUser -GuestPassword $guestPass -ScriptType bat -WarningAction 0
 }
 
