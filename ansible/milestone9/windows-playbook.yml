@@ -26,7 +26,6 @@
     ansible.windows.win_powershell: 
       script: |
         Rename-Computer -NewName "{{ vm_name }}"
-        Restart-Computer
 
   - name: Create new forest 
     ansible.windows.win_domain: 
